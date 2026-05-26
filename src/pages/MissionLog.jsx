@@ -80,7 +80,7 @@ function MissionLog() {
         {/* ── Header & Act Toggles ── */}
         <div className="mb-12 flex flex-col items-center text-center">
           <h1
-            className="text-3xl sm:text-5xl font-black uppercase tracking-tighter text-white mb-6"
+            className="text-3xl sm:text-5xl font-bold uppercase tracking-tighter text-white mb-6"
             style={{ textShadow: "0 0 15px rgba(0, 132, 255, 0.5)" }}
           >
             Combat Log Archive
