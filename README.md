@@ -48,8 +48,8 @@ createRoot(document.getElementById("root")).render(
 ├── public/                 # SEO images (og-image.webp), favicon, 404.html redirect script
 ├── src/                    
 │   ├── assets/             # Media assets (character portraits, unit emblems, UI overlays)
-│   ├── components/         # Terminal borders, Data tables, Navigation, CRT effects
-│   ├── pages/              # Main route components (Dashboard, Roster, Archives)
+│   ├── components/         # Fire particles effect, Nabar
+│   ├── pages/              # Main route components
 │   ├── App.jsx             
 │   ├── index.css           # Global tactical theme styling
 │   └── main.jsx            
