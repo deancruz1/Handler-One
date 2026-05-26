@@ -112,7 +112,7 @@ function Navbar() {
             onClick={closeMenu}
             className="text-text-secondary hover:text-blue-400 transition-colors duration-300 text-2xl font-light tracking-wide"
           >
-            03 GitHub
+            06 GitHub
           </a>
         </div>
       </div>
