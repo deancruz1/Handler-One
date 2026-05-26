@@ -1,0 +1,70 @@
+/* ── Expanded Font Weights for Better Typography Hierarchy ── */
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&family=Poppins:wght@300;400;600;800&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  /* ── Default to Dark Mode to match your components ── */
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #111827; /* Very dark gray for subtle depth */
+
+  /* ── Text Colors ── */
+  --color-text-primary: #f9fafb; /* Off-white, easier on the eyes than pure #FFF */
+  --color-text-secondary: #9ca3af; /* Cool gray for descriptions */
+
+  /* ── Brand Colors (Matched to the '86' Neon Blue) ── */
+  --color-accent: #0084ff;
+  --color-accent-glow: rgba(0, 132, 255, 0.7);
+
+  /* ── UI Elements ── */
+  --color-border: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Matches your border-white/10 classes */
+
+  /* ── Typography ── */
+  --font-body: "Barlow Condensed", sans-serif;
+  --font-heading: "Poppins", sans-serif;
+}
+
+/* ── Light Mode Override (Optional, if you ever add a theme toggle) ── */
+.light {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f3f4f6;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-accent: #2563eb;
+  --color-accent-glow: rgba(37, 99, 235, 0.5);
+  --color-border: #e5e7eb;
+}
+
+/* ── Global Premium Resets ── */
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+
+  /* These make fonts look much sharper and higher-quality on modern displays */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Prevents horizontal scroll bounce on mobile */
+  overflow-x: hidden;
+}
+
+/* Custom Selection Highlight (Premium touch) */
+::selection {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+/* Smooth Scrolling for the whole app */
+html {
+  scroll-behavior: smooth;
+}
