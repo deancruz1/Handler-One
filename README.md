@@ -58,20 +58,10 @@ createRoot(document.getElementById("root")).render(
 └── vite.config.js          
 ```
 
-## Navigation Structure
-
-The terminal interface includes links to:
-
-- Main Console (Dashboard)
-- Spearhead Roster (`/characters` route)
-- System Diagnostics (Settings/Theme toggle)
-
 ## Key Components
 
-- **CRTOverlay:** Animated scanline elements and vignette effects that give the application its retro-military aesthetic.
-- **ProcessorCard:** Detailed dossier cards for individual 86 units, displaying sync rates and operational status.
-- **DataGrid:** Informational tables for mission records and Juggernaut armaments.
-- **Navigation Console:** Fixed command bar for switching between different terminal views.
+- **FireParticlesBackground:** Animated particles that represent fire sparks used throughout website to give "battlefield" feeling
+- **Navbar:** Responsive navbar with breakpoints in desktop, tablet, and mobile.
 
 ## Context & Hooks
 
