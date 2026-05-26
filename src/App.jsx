@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import Plot from "./pages/Plot";
+import Intel from "./pages/Intel";
 import Characters from "./pages/Characters";
 import Arsenal from "./pages/Arsenal";
 import Factions from "./pages/Factions";
@@ -14,7 +14,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/plot" element={<Plot />} />
+          <Route path="/intel" element={<Intel />} />
           <Route path="/characters" element={<Characters />} />
           <Route path="/arsenal" element={<Arsenal />} />
           <Route path="/factions" element={<Factions />} />

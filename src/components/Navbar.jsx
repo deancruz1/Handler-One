@@ -3,11 +3,11 @@ import { NavLink } from "react-router-dom";
 
 const links = [
   { to: "/", label: "00 Home" },
-  { to: "/plot", label: "01 Plot" },
+  { to: "/intel", label: "01 Intel" },
   { to: "/characters", label: "02 Spearhead Squadron" },
   { to: "/arsenal", label: "03 Arsenal" },
   { to: "/factions", label: "04 Factions" },
-  { to: "/missions", label: "05 Missions" },
+  { to: "/missions", label: "05 Mission Logs" },
 ];
 // (Remember to change the GitHub link label in the Navbar to "06 GitHub" to match!)
 
