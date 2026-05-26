@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const links = [
   { to: "/", label: "00 Home" },
   { to: "/plot", label: "01 Plot" },
-  { to: "/characters", label: "02 Characters" },
+  { to: "/characters", label: "02 Spearhead Squadron" },
   { to: "/arsenal", label: "03 Arsenal" },
   { to: "/factions", label: "04 Factions" },
   { to: "/missions", label: "05 Missions" },
