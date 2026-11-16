@@ -153,97 +153,6 @@
   object-fit: contain;
 }
 
-.roster {
-  overflow-y: auto;
-  flex: 1;
-  min-height: 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--faint) transparent;
-}
-.grp {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 16px 4px;
-  color: var(--faint);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  position: sticky;
-  top: 0;
-  background: var(--panel);
-  z-index: 1;
-}
-.roster button {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 8px 1fr 92px;
-  gap: 12px;
-  align-items: center;
-  padding: 7px 16px;
-  border-left: 2px solid transparent;
-  text-align: left;
-  cursor: pointer;
-}
-.roster button:hover {
-  background: rgba(255, 255, 255, 0.03);
-}
-.roster button[aria-selected="true"] {
-  background: rgba(77, 163, 255, 0.09);
-  border-left-color: var(--signal);
-}
-.roster button.kia[aria-selected="true"] {
-  background: rgba(255, 77, 77, 0.07);
-  border-left-color: var(--alert);
-}
-.roster .s {
-  width: 6px;
-  height: 6px;
-  background: var(--signal);
-}
-.roster .kia .s {
-  background: none;
-  border: 1px solid var(--alert);
-}
-.roster b {
-  display: block;
-  font: 600 17px/1.1 var(--display);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-.roster .kia b {
-  color: #93a0ae;
-}
-.roster small {
-  color: var(--dim);
-  font-size: 10px;
-}
-.wave {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  height: 18px;
-  justify-content: flex-end;
-}
-.wave i {
-  width: 2px;
-  background: var(--signal);
-  height: 100%;
-  animation: wave 1.1s ease-in-out infinite;
-}
-@keyframes wave {
-  0%,
-  100% {
-    transform: scaleY(0.15);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-.flat {
-  height: 1px;
-  background: rgba(255, 77, 77, 0.5);
-}
-
 /* ── mission strip ── */
 .log {
   display: grid;
@@ -321,9 +230,6 @@
   .overview .side {
     overflow: visible;
   }
-  .roster {
-    max-height: 60vh;
-  }
   .log {
     grid-template-columns: 1fr;
     height: auto;
@@ -331,7 +237,6 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wave i,
   .unit.kia canvas {
     animation: none;
   }

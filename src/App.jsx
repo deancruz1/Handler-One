@@ -5,12 +5,10 @@ import Intel from "./pages/Intel";
 import Characters from "./pages/Characters";
 import MissionLog from "./pages/MissionLog";
 
-// Pages that draw in 3D load on demand, so three.js stays out of the first paint.
+// Pages that draw in 3D load on demand, so three.js stays out of the text pages.
 const Overview = lazy(() => import("./pages/Overview"));
 const Arsenal = lazy(() => import("./pages/Arsenal"));
 const Factions = lazy(() => import("./pages/Factions"));
-
-const legacy = (page) => <div className="legacy">{page}</div>;
 
 function App() {
   return (
@@ -20,11 +18,11 @@ function App() {
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Overview />} />
-            <Route path="/intel" element={legacy(<Intel />)} />
-            <Route path="/characters" element={legacy(<Characters />)} />
+            <Route path="/intel" element={<Intel />} />
+            <Route path="/characters" element={<Characters />} />
             <Route path="/arsenal" element={<Arsenal />} />
             <Route path="/factions" element={<Factions />} />
-            <Route path="/missions" element={legacy(<MissionLog />)} />
+            <Route path="/missions" element={<MissionLog />} />
           </Routes>
         </Suspense>
       </main>

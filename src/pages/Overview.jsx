@@ -1,33 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import characters from "../data/characters";
+import Roster from "../components/Roster";
 import missions from "../data/missions";
+import { roster, neighbour } from "../data/roster";
 import { mountSector } from "../three/sectorScene";
 import "./overview.css";
 
 const EPISODES = 23;
 const FIRST_OF_ACT_TWO = 12;
-
-// The Handler commands from behind the wall and has no machine. Shin fights with blades; everyone else with guns.
-const roster = characters.map((c) => ({
-  ...c,
-  kia: c.status.startsWith("KIA"),
-  machine: c.id === "lena" ? null : c.id === "shin" ? "blades" : "guns",
-}));
-const synced = roster.filter((r) => !r.kia);
-const lost = roster.filter((r) => r.kia);
-const order = [...synced, ...lost];
-
-// Each synced Processor gets a steady, slightly different waveform.
-const wave = (seed) =>
-  Array.from({ length: 16 }, (_, i) => {
-    const n = Math.abs(Math.sin(seed * 12.9898 + i * 78.233) * 43758.5453) % 1;
-    return {
-      animationDelay: `-${(n * 1.1).toFixed(2)}s`,
-      animationDuration: `${(0.7 + ((n * 7.3) % 1) * 0.8).toFixed(2)}s`,
-    };
-  });
-const waves = Object.fromEntries(synced.map((r, i) => [r.id, wave(i + 1)]));
 
 function Overview() {
   const [id, setId] = useState("shin");
@@ -62,10 +42,7 @@ function Overview() {
       if (who) {
         e.preventDefault();
         byKeyboard.current = true;
-        setId((current) => {
-          const i = order.findIndex((r) => r.id === current);
-          return order[(i + who + order.length) % order.length].id;
-        });
+        setId((current) => neighbour(current, who));
       }
       if (which)
         setRecord((i) => (i + which + missions.length) % missions.length);
@@ -76,35 +53,6 @@ function Overview() {
 
   const who = roster.find((r) => r.id === id);
   const mission = missions[record];
-
-  const row = (r) => (
-    <button
-      key={r.id}
-      type="button"
-      role="option"
-      aria-selected={r.id === id}
-      className={r.kia ? "kia" : undefined}
-      ref={(el) => {
-        rows.current[r.id] = el;
-      }}
-      onClick={() => setId(r.id)}
-    >
-      <span className="s" />
-      <span>
-        <b>{r.codename}</b>
-        <small>{r.name}</small>
-      </span>
-      {r.kia ? (
-        <span className="flat" />
-      ) : (
-        <span className="wave">
-          {waves[r.id].map((style, i) => (
-            <i key={i} style={style} />
-          ))}
-        </span>
-      )}
-    </button>
-  );
 
   return (
     <div className="console overview">
@@ -142,18 +90,7 @@ function Overview() {
           <p>{who.description}</p>
         </div>
 
-        <div className="roster" role="listbox" aria-label="Processors">
-          <div className="grp">
-            <span>Synced</span>
-            <span>{synced.length}</span>
-          </div>
-          {synced.map(row)}
-          <div className="grp">
-            <span>Signal lost</span>
-            <span>{lost.length}</span>
-          </div>
-          {lost.map(row)}
-        </div>
+        <Roster selected={id} onSelect={setId} rows={rows} />
       </aside>
 
       <section className="strip log">

@@ -1,0 +1,119 @@
+/* Text pages: a reading column inside the console. */
+.doc {
+  padding: 40px 48px 72px;
+  max-width: 1120px;
+}
+.doc h1 {
+  font: 700 clamp(40px, 5vw, 64px) / 0.95 var(--display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.doc h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font: 600 24px/1.1 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.doc h2 span {
+  font: 400 11px var(--mono);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--dim);
+}
+.doc p {
+  color: #aab6c3;
+  font-size: 13px;
+  line-height: 1.75;
+  max-width: 68ch;
+}
+.doc p.lead {
+  color: var(--text);
+  font-size: 14.5px;
+  margin-bottom: 18px;
+}
+.doc strong {
+  color: var(--signal);
+  font-weight: 500;
+}
+.doc section {
+  margin-bottom: 36px;
+}
+.doc blockquote {
+  border-left: 1px solid var(--alert);
+  padding-left: 14px;
+  margin-top: 28px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.75;
+  max-width: 64ch;
+}
+.doc .logo {
+  height: 40px;
+  width: auto;
+  margin-top: 40px;
+  opacity: 0.6;
+  filter: grayscale(1);
+}
+
+/* intel: the report on the left, the archives beside it */
+.intel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 56px;
+}
+.intel > div:last-child {
+  padding-top: 8px;
+}
+
+/* mission log */
+.act2 h2,
+.act2 .ep {
+  color: var(--alert);
+}
+.episode {
+  display: grid;
+  grid-template-columns: 56px 200px minmax(0, 1fr);
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.episode .ep {
+  font: 700 34px/1 var(--display);
+  color: var(--signal);
+}
+.episode h3 {
+  font: 600 22px/1.1 var(--display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.episode .meta {
+  color: var(--dim);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+@media (max-width: 1180px) {
+  .intel {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .episode {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  .episode p {
+    grid-column: 2;
+  }
+}
+@media (max-width: 980px) {
+  .doc {
+    padding: 28px 16px 56px;
+  }
+}
