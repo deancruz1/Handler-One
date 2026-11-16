@@ -146,4 +146,4 @@ H.bake = function (THREE, root, angle = 24) {
   const geo = a => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(a, 3)); return g; };
   return { fill: geo(F), edges: geo(E) };
 };
-H.stats = function (root) { let meshes = 0, tris = 0; root.traverse(m => { if (m.isMesh) { meshes++; tris += (m.geometry.index ? m.geometry.index.count : m.geometry.attributes.position.count) / 3; } }); return { meshes, tris: Math.round(tris) }; };
+

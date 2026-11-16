@@ -68,7 +68,7 @@ export function mountSector(mapEl, inset, roster, onSelect) {
   });
   const wreck = stamp(baked.wreck, 0xff4d4d, SCALE); wreck.visible = false; scene.add(wreck);
 
-  /* Legion contacts: Löwe and Ameise copies merged into one mesh, or plain markers if those models are absent */
+  /* Legion contacts: Löwe and Ameise copies merged into one mesh */
   const contacts = Array.from({ length: 26 }, (_, i) => { const x = 15 + rnd() * 15, z = -hd + 2 + rnd() * (D - 4); return { p: at(x, z, .03), ry: -Math.PI / 2 + (rnd() - .5) * .9, kind: i % 4 ? 'ameise' : 'lowe' }; });
   function scatter(b, list, scale) {
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), S = new THREE.Vector3(scale, scale, scale);
@@ -77,11 +77,9 @@ export function mountSector(mapEl, inset, roster, onSelect) {
       const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(a, 3)); return g; };
     return { fill: out(b.fill.attributes.position), edges: out(b.edges.attributes.position) };
   }
-  scene.userData.legion = [];
   for (const kind of ['lowe', 'ameise']) {
     const list = contacts.filter(c => c.kind === kind);
-    if (K[kind]) { const b = scatter(K.bake(THREE, K[kind](THREE)), list, .36); scene.add(new THREE.Mesh(b.fill, occluder), new THREE.LineSegments(b.edges, new THREE.LineBasicMaterial({ color: 0xf5a524, transparent: true, opacity: .62 }))); }
-    else { const coneG = new THREE.ConeGeometry(.36, .8, 4), coneM = new THREE.MeshBasicMaterial({ color: 0xf5a524 }); list.forEach(c => { const m = new THREE.Mesh(coneG, coneM); m.position.copy(c.p).y += .9; m.rotation.x = Math.PI; m.userData.ph = rnd() * 6; scene.add(m); scene.userData.legion.push(m); }); }
+    const b = scatter(K.bake(THREE, K[kind](THREE)), list, .36); scene.add(new THREE.Mesh(b.fill, occluder), new THREE.LineSegments(b.edges, new THREE.LineBasicMaterial({ color: 0xf5a524, transparent: true, opacity: .62 })));
   }
 
   /* ── camera ── */
@@ -141,7 +139,6 @@ export function mountSector(mapEl, inset, roster, onSelect) {
     raf = requestAnimationFrame(frame); const t = clock.getElapsedTime();
     controls.target.lerp(goal, .05); controls.update();
     units.forEach(u => { if (u.g.userData.ring) { const on = u.r.id === current; u.g.userData.ring.scale.setScalar(on ? 1.12 + Math.sin(t * 3) * .1 : 1); if (u.g.userData.body) u.g.userData.body.rotation.y = t; } });
-    scene.userData.legion.forEach(m => m.position.y += Math.sin(t * 1.4 + m.userData.ph) * .003);
     renderer.render(scene, camera);
     if (!uState.none && uCanvas.clientWidth) {
       const uw = uCanvas.clientWidth, uh = uCanvas.clientHeight, a = t * .22 + .95;
