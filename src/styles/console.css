@@ -231,6 +231,10 @@ button.tag:hover > *,
     border-right: 0;
     border-bottom: 1px solid var(--line);
     background: var(--bg);
+    /* the links run off the edge: fade the last of them to show there is more to swipe to */
+    padding-right: 28px;
+    mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent);
+    scrollbar-width: none;
   }
   .brand {
     border: 0;

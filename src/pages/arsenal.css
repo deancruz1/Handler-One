@@ -18,6 +18,15 @@
   position: relative;
   height: 100%;
 }
+/* on a phone the lineup keeps its size and scrolls sideways */
+@media (max-width: 980px) {
+  .strip:has(.lineup) {
+    overflow-x: auto;
+  }
+  .lineup {
+    min-width: 640px;
+  }
+}
 .lineup canvas {
   width: 100%;
   height: 100%;

@@ -6,6 +6,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import K from "./models.js";
+import { allowPageScroll, isSmall, pixelRatio, watchVisible } from "./stage.js";
 
 export function mountSector(mapEl, inset, roster, onSelect) {
   const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -69,7 +70,8 @@ export function mountSector(mapEl, inset, roster, onSelect) {
   const wreck = stamp(baked.wreck, 0xff4d4d, SCALE); wreck.visible = false; scene.add(wreck);
 
   /* Legion contacts: Löwe and Ameise copies merged into one mesh */
-  const contacts = Array.from({ length: 26 }, (_, i) => { const x = 15 + rnd() * 15, z = -hd + 2 + rnd() * (D - 4); return { p: at(x, z, .03), ry: -Math.PI / 2 + (rnd() - .5) * .9, kind: i % 4 ? 'ameise' : 'lowe' }; });
+  const contacts = Array.from({ length: isSmall() ? 12 : 26 },                        // a thinner swarm on phones
+    (_, i) => { const x = 15 + rnd() * 15, z = -hd + 2 + rnd() * (D - 4); return { p: at(x, z, .03), ry: -Math.PI / 2 + (rnd() - .5) * .9, kind: i % 4 ? 'ameise' : 'lowe' }; });
   function scatter(b, list, scale) {
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), S = new THREE.Vector3(scale, scale, scale);
     const out = src => { const n = src.count, a = new Float32Array(n * 3 * list.length);
@@ -85,14 +87,15 @@ export function mountSector(mapEl, inset, roster, onSelect) {
   /* ── camera ── */
   const add = (parent, tag) => { const el = document.createElement(tag); parent.appendChild(el); made.push(el); return el; };
   const canvas = add(mapEl, 'canvas');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); renderer.setClearColor(BG); renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); renderer.setClearColor(BG); renderer.setPixelRatio(pixelRatio());
   const camera = new THREE.PerspectiveCamera(40, 1, .1, 300); camera.position.set(-6, 30, 46);
-  const controls = new OrbitControls(camera, canvas);
+  const controls = new OrbitControls(camera, canvas); allowPageScroll(controls);
   Object.assign(controls, { enableZoom: false, enablePan: false, enableDamping: true, minPolarAngle: .5, maxPolarAngle: 1.25, autoRotate: !reduce, autoRotateSpeed: .35 });
   const goal = new THREE.Vector3(0, 0, 0);
   const fit = () => { const w = mapEl.clientWidth, h = mapEl.clientHeight, wide = w > 760 && !inset.classList.contains('none'); if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h;
     camera.setViewOffset(w, h, wide ? 70 : 0, wide ? -56 : 0, w, h); };                 // keep the focus clear of the machine inset, when it is showing
   const ro = new ResizeObserver(fit); ro.observe(mapEl); fit();
+  const seen = watchVisible(mapEl);
 
   /* ── html tags pinned to 3D points ── */
   const tags = [];
@@ -109,7 +112,7 @@ export function mountSector(mapEl, inset, roster, onSelect) {
 
   /* ── inset: the selected machine as a live, rigged hologram ── */
   const uCanvas = add(inset, 'canvas');
-  const uR = new THREE.WebGLRenderer({ canvas: uCanvas, antialias: true, alpha: true }); uR.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const uR = new THREE.WebGLRenderer({ canvas: uCanvas, antialias: true, alpha: true }); uR.setPixelRatio(pixelRatio());
   const uScene = new THREE.Scene(), uCam = new THREE.PerspectiveCamera(28, 1, .1, 100), holo = {};
   for (const k in rigs) { holo[k] = K.hologram(THREE, rigs[k], { color: 0x4da3ff, fill: 0x060a11 }); uScene.add(rigs[k]); rigs[k].userData.pilot.traverse(o => o.material?.color.set(0xe6eef7)); }
   const floorMat = new THREE.LineBasicMaterial({ color: 0x4da3ff, transparent: true, opacity: .35 });
@@ -136,7 +139,8 @@ export function mountSector(mapEl, inset, roster, onSelect) {
   /* ── loop ── */
   const v = new THREE.Vector3(), clock = new THREE.Clock();
   function frame() {
-    raf = requestAnimationFrame(frame); const t = clock.getElapsedTime();
+    raf = requestAnimationFrame(frame); if (!seen.on) return;
+    const t = clock.getElapsedTime();
     controls.target.lerp(goal, .05); controls.update();
     units.forEach(u => { if (u.g.userData.ring) { const on = u.r.id === current; u.g.userData.ring.scale.setScalar(on ? 1.12 + Math.sin(t * 3) * .1 : 1); if (u.g.userData.body) u.g.userData.body.rotation.y = t; } });
     renderer.render(scene, camera);
@@ -154,7 +158,7 @@ export function mountSector(mapEl, inset, roster, onSelect) {
   return {
     select,
     dispose() {
-      cancelAnimationFrame(raf); ro.disconnect(); controls.dispose();
+      cancelAnimationFrame(raf); ro.disconnect(); seen.stop(); controls.dispose();
       for (const r of [renderer, uR]) { r.dispose(); r.forceContextLoss(); }
       made.forEach(el => el.remove());
     },

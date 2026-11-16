@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import K from "./models.js";
+import { allowPageScroll, pixelRatio, watchVisible } from "./stage.js";
 
 const BG = 0x05070a, BLUE = 0x4da3ff, AMBER = 0xf5a524;
 const css = c => "#" + c.toString(16).padStart(6, "0");
@@ -18,11 +19,11 @@ export function mountArsenal({ stage, lineup, mechs, onSelect }) {
 
   /* ── viewer ── */
   const renderer = new THREE.WebGLRenderer({ canvas: add(stage, "canvas"), antialias: true });
-  renderer.setClearColor(BG); renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(BG); renderer.setPixelRatio(pixelRatio());
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.toneMapping = THREE.ACESFilmicToneMapping;
   const scene = new THREE.Scene(), env = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 200); camera.position.set(8, 4.4, 10);
-  const controls = new OrbitControls(camera, renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement); allowPageScroll(controls);
   Object.assign(controls, { enableZoom: false, enablePan: false, enableDamping: true, minPolarAngle: 0.7, maxPolarAngle: 1.52, autoRotate: !reduce, autoRotateSpeed: 0.5 });
   scene.add(new THREE.HemisphereLight(0xdfe9ff, 0x10151c, 0.7));
   const key = new THREE.DirectionalLight(0xffffff, 2.6); key.position.set(-6, 11, 7); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
@@ -56,7 +57,7 @@ export function mountArsenal({ stage, lineup, mechs, onSelect }) {
   }
 
   /* ── scale lineup: every machine side-on at one scale, over a metre rule ── */
-  const luR = new THREE.WebGLRenderer({ canvas: add(lineup, "canvas"), antialias: true, alpha: true }); luR.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const luR = new THREE.WebGLRenderer({ canvas: add(lineup, "canvas"), antialias: true, alpha: true }); luR.setPixelRatio(pixelRatio());
   const luScene = new THREE.Scene(), luCam = new THREE.OrthographicCamera();
   const occ = new THREE.MeshBasicMaterial({ color: BG, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1, side: THREE.DoubleSide });
   const slots = []; let cursor = 1;
@@ -84,9 +85,10 @@ export function mountArsenal({ stage, lineup, mechs, onSelect }) {
   const clock = new THREE.Clock();
   const fit = () => { const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); drawLineup(); };
   const ro = new ResizeObserver(fit); ro.observe(stage); ro.observe(lineup);
+  const seen = watchVisible(stage);
   function frame() {
     raf = requestAnimationFrame(frame);
-    if (!model) return;
+    if (!model || !seen.on) return;
     controls.update(); model.userData.update(clock.getElapsedTime(), view.motion); renderer.render(scene, camera);
   }
   frame();
@@ -99,7 +101,7 @@ export function mountArsenal({ stage, lineup, mechs, onSelect }) {
       if (!prev || prev.id !== next.id) drawLineup();
     },
     dispose() {
-      cancelAnimationFrame(raf); ro.disconnect(); controls.dispose(); env.dispose();
+      cancelAnimationFrame(raf); ro.disconnect(); seen.stop(); controls.dispose(); env.dispose();
       for (const r of [renderer, luR]) { r.dispose(); r.forceContextLoss(); }
       made.forEach(el => el.remove());
     },

@@ -4,6 +4,7 @@
    mountGlobe(stage, powers, onSelect) returns { select(id), toggleHold(), dispose() }. */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { allowPageScroll, pixelRatio, watchVisible } from "./stage.js";
 
 const BG = 0x05070a;
 const css = c => "#" + c.toString(16).padStart(6, "0");
@@ -41,9 +42,9 @@ export function mountGlobe(stage, powers, onSelect) {
 
   /* ── scene ── */
   const canvas = add('canvas');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); renderer.setClearColor(BG); renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); renderer.setClearColor(BG); renderer.setPixelRatio(pixelRatio());
   const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 1, .1, 400), globe = new THREE.Group(); scene.add(globe);
-  const controls = new OrbitControls(camera, canvas); Object.assign(controls, { enableZoom: false, enablePan: false, enableDamping: true, rotateSpeed: .5, autoRotate: !reduce, autoRotateSpeed: .25, minPolarAngle: .5, maxPolarAngle: 2.2 });
+  const controls = new OrbitControls(camera, canvas); allowPageScroll(controls); Object.assign(controls, { enableZoom: false, enablePan: false, enableDamping: true, rotateSpeed: .5, autoRotate: !reduce, autoRotateSpeed: .25, minPolarAngle: .5, maxPolarAngle: 2.2 });
   const DIST = 46; camera.position.copy(P(-4, 30, DIST));
   globe.add(new THREE.Mesh(new THREE.SphereGeometry(R - .04, 64, 48), new THREE.MeshBasicMaterial({ color: 0x060a11 })));
   // rim light: a faint halo so the limb reads against the dark
@@ -141,10 +142,13 @@ export function mountGlobe(stage, powers, onSelect) {
 
   /* ── loop ── */
   const v = new THREE.Vector3(), n = new THREE.Vector3(), clock = new THREE.Clock();
-  const fit = () => { const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); dotMat.uniforms.uSize.value = Math.min(devicePixelRatio, 2) * h / 520; };
+  const fit = () => { const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return; const k = Math.min(1, w / h);                       // in a portrait frame, widen the view so the whole globe still fits
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = 2 * Math.atan(Math.tan(15 * D2R) / k) / D2R; camera.updateProjectionMatrix(); dotMat.uniforms.uSize.value = pixelRatio() * h / 520 * k; };
   const ro = new ResizeObserver(fit); ro.observe(stage); fit();
+  const seen = watchVisible(stage);
   function frame() {
-    raf = requestAnimationFrame(frame); const t = clock.getElapsedTime();
+    raf = requestAnimationFrame(frame); if (!seen.on) return;
+    const t = clock.getElapsedTime();
     if (focus) { camera.position.lerp(focus, .06).setLength(DIST); if (camera.position.distanceTo(focus) < .4) focus = null; }
     controls.update(); dotMat.uniforms.uTime.value = t; cloud.rotation.y = Math.sin(t * .05) * .06; cloud.children[0].material.opacity = .38 + Math.sin(t * 1.7) * .12;
     bursts.forEach(m => { const u = m.userData, k = (t - u.t0) / u.life; if (k > 1 || k < 0) return respawn(m, t + rnd() * 1.5); m.scale.setScalar(.05 + k * u.size); m.material.opacity = (1 - k) * .9; });
@@ -158,7 +162,7 @@ export function mountGlobe(stage, powers, onSelect) {
     select,
     toggleHold() { hold = !hold; controls.autoRotate = !hold && !reduce; },
     dispose() {
-      cancelAnimationFrame(raf); ro.disconnect(); canvas.removeEventListener("pointerdown", release); controls.dispose();
+      cancelAnimationFrame(raf); ro.disconnect(); seen.stop(); canvas.removeEventListener("pointerdown", release); controls.dispose();
       renderer.dispose(); renderer.forceContextLoss(); made.forEach(el => el.remove());
     },
   };
