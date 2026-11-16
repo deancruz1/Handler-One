@@ -36,7 +36,7 @@ The geography on the Factions globe is a schematic guess. No official map of the
 ## Folder Structure
 
 ```
-├── public/                 # favicon and the 404.html redirect for deep links
+├── public/                 # favicon, social preview image and the 404.html redirect
 ├── src/
 │   ├── assets/             # character portraits, feeds and personal marks
 │   ├── components/         # Rail (navigation), Roster, Segmented control
