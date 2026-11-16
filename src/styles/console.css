@@ -266,7 +266,7 @@ button.tag:hover > *,
   }
   .stage,
   .stage.tall {
-    height: 60vh;
+    height: min(60vh, 480px);
     border-bottom: 1px solid var(--line);
   }
   .side {
