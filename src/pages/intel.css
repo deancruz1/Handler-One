@@ -1,0 +1,298 @@
+/* The report beside a schematic of the Republic: the sectors inside the wall, the Eighty-Six outside it. */
+.intel .stage {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(24px, 3vw, 80px);
+  padding: clamp(28px, 3vw, 72px);
+  overflow-y: auto;
+}
+
+.report h1 {
+  font: 700 clamp(44px, 4.4vw, 116px) / 0.92 var(--display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: clamp(20px, 1.8vw, 40px);
+}
+.report .lead {
+  color: var(--text);
+  font-size: clamp(13.5px, 0.5vw + 7px, 17px);
+  line-height: 1.75;
+  max-width: 64ch;
+  margin-bottom: 1.1em;
+}
+.report strong {
+  color: var(--signal);
+  font-weight: 500;
+}
+
+/* the official line, struck through, against what is on file */
+.record {
+  width: 100%;
+  max-width: 64ch;
+  border-collapse: collapse;
+  margin: clamp(20px, 1.8vw, 40px) 0;
+  font-size: clamp(12px, 0.4vw + 6.5px, 15px);
+  text-align: left;
+}
+.record th,
+.record td {
+  padding: 0.8em 1.2em 0.8em 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.record thead th {
+  color: var(--dim);
+  font-size: 0.8em;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-bottom-color: var(--line-strong);
+}
+.record tbody th {
+  color: var(--dim);
+  font-weight: 400;
+}
+.record del {
+  color: var(--dim);
+  text-decoration-color: var(--alert);
+  text-decoration-thickness: 1px;
+}
+.record .alert {
+  color: var(--alert);
+}
+
+.report blockquote {
+  border-left: 1px solid var(--alert);
+  padding-left: 1.1em;
+  max-width: 60ch;
+  color: var(--text);
+  font-size: clamp(12.5px, 0.4vw + 7px, 15.5px);
+  line-height: 1.75;
+}
+
+/* ── schematic ── */
+.schematic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.schematic .map {
+  position: relative;
+  width: min(100%, calc(100dvh - 150px));
+  aspect-ratio: 1;
+}
+.schematic svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.schematic .label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: var(--dim);
+  font-size: clamp(9.5px, 0.3vw + 5.5px, 13px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.schematic .label.hostile {
+  color: var(--hostile);
+  transform: translate(-100%, -50%);
+}
+.schematic .s86 {
+  fill: none;
+  stroke: rgba(77, 163, 255, 0.07);
+}
+.schematic .edge {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-dasharray: 3 7;
+}
+.schematic .sector {
+  stroke: var(--line-strong);
+}
+.schematic .wall {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 3;
+  opacity: 0.75;
+}
+.schematic .wall.inner {
+  stroke-width: 1;
+  opacity: 0.35;
+}
+.schematic .legion {
+  fill: none;
+  stroke: var(--hostile);
+  stroke-width: 1.5;
+  opacity: 0.7;
+}
+.schematic .lost {
+  stroke: var(--alert);
+  stroke-width: 2;
+  opacity: 0.85;
+}
+.schematic .unit {
+  fill: var(--signal);
+}
+.schematic .unit.handler {
+  fill: var(--bg);
+  stroke: var(--signal);
+  stroke-width: 3;
+}
+.schematic .raid {
+  stroke: var(--signal);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 8;
+  opacity: 0.75;
+  animation: raid 1.4s linear infinite;
+}
+@keyframes raid {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.schematic .tag {
+  transform: translate(14px, -50%);
+  font-size: clamp(10px, 0.3vw + 6px, 13px);
+}
+.schematic .tag.left {
+  transform: translate(calc(-100% - 16px), -50%);
+}
+.schematic .tag:hover {
+  background: var(--signal);
+  color: #04101e;
+}
+
+.schematic figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  color: var(--dim);
+  font-size: clamp(10.5px, 0.25vw + 7px, 13px);
+}
+.schematic figcaption span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.schematic figcaption span::before {
+  content: "";
+  flex: none;
+}
+.k-handler::before {
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--signal);
+  transform: rotate(45deg);
+}
+.k-unit::before {
+  width: 9px;
+  height: 9px;
+  background: var(--signal);
+}
+.k-lost::before {
+  width: 11px;
+  height: 11px;
+  background:
+    linear-gradient(45deg, transparent 44%, var(--alert) 44% 56%, transparent 56%),
+    linear-gradient(-45deg, transparent 44%, var(--alert) 44% 56%, transparent 56%);
+}
+.k-raid::before {
+  width: 18px;
+  border-top: 1.5px dashed var(--signal);
+}
+
+/* ── side panel: the archives, each with its episodes ── */
+.archives section {
+  padding: 20px 16px 18px;
+  border-bottom: 1px solid var(--line);
+  --c: var(--signal);
+}
+.archives .act2 {
+  --c: var(--alert);
+}
+.archives .restricted {
+  --c: var(--dim);
+}
+.archives h2 {
+  font: 700 28px/0.95 var(--display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--c);
+}
+.archives .range {
+  color: var(--dim);
+  margin-top: 6px;
+}
+.archives p {
+  color: #aab6c3;
+  font-size: 11.5px;
+  line-height: 1.65;
+  margin-top: 12px;
+}
+.archives ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 14px;
+}
+.archives li a {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 34px;
+  border: 1px solid color-mix(in srgb, var(--c) 50%, transparent);
+  background: color-mix(in srgb, var(--c) 8%, transparent);
+  font: 700 17px/1 var(--display);
+  color: var(--c);
+}
+.archives li a:hover,
+.archives li a:focus-visible {
+  background: var(--c);
+  color: #04101e;
+}
+.archives section:last-of-type {
+  margin-bottom: 24px;
+}
+.archives .logo {
+  height: 40px;
+  width: auto;
+  margin: auto 16px 20px;
+  align-self: flex-start;
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+@media (max-width: 1240px) {
+  .intel .stage {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .schematic .map {
+    width: min(100%, 640px);
+  }
+}
+@media (max-width: 980px) {
+  .intel .stage.tall {
+    height: auto;
+    padding: 28px 16px;
+  }
+  .schematic .map {
+    width: 100%;
+  }
+  .archives p {
+    font-size: 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .schematic .raid {
+    animation: none;
+  }
+}

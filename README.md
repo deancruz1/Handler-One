@@ -9,16 +9,16 @@ Live site: [https://deancruz1.github.io/Handler-One/](https://deancruz1.github.i
 | Route | Page | What it shows |
 | --- | --- | --- |
 | `/` | Overview | A wireframe map of Sector 86 with each Processor's Juggernaut, a marker where each signal was lost, and the Legion to the east. Selecting a Processor opens their file and shows their machine. |
-| `/intel` | Intel | The situation report and the two story arcs. |
+| `/intel` | Intel | The situation report beside a schematic of the Republic: the Handler behind the Gran Mur, the Processors in Sector 86 and the Legion beyond. The story arcs link to their episodes. |
 | `/characters` | Squadron | Every Processor at full size, beside the sync roster. |
 | `/arsenal` | Arsenal | The Juggernaut, Reginleif, Löwe and Ameise as 3D models you can walk around, with a side-on lineup at one scale. |
 | `/factions` | Factions | A globe of the known world, coloured by who holds the ground. |
-| `/missions` | Mission log | The episodes on file, grouped by arc. |
+| `/missions` | Mission log | One episode at a time with the Processors it names, beside the list of all 23 episodes and a timeline along the bottom. |
 
 ## Features
 
 - **3D models built in code.** The four machines are assembled from three.js geometry in `src/three/`, with no model files to download. Each has a rigged walk cycle and can be shown as a hologram or painted.
-- **Console layout.** One navigation rail and a shared stage, side panel and strip layout across every page. On phones and tablets it becomes one column: the rail turns into a header with all six pages in a grid, and each page's picker (the roster, the machines, the powers) sits directly under its view, so what you tap and what it changes stay on screen together.
+- **Console layout.** One navigation rail and a shared stage, side panel and strip layout across every page. On phones and tablets it becomes one column: the rail turns into a header with all six pages in a grid, and each page's picker (the roster, the machines, the powers, the episodes) sits directly under its view, so what you tap and what it changes stay on screen together.
 - **Keyboard control.** Arrow keys step through Processors, machines, powers and episodes. In the Arsenal, `W` toggles the walk cycle and `P` shows the pilot.
 - **Deep links on GitHub Pages.** A custom `404.html` and a redirect in `main.jsx` let any route be opened or refreshed directly on static hosting.
 - **Reduced motion.** Auto-rotation and looping animations stop when the visitor's system asks for less motion.
@@ -42,7 +42,7 @@ The geography on the Factions globe is a schematic guess. No official map of the
 │   ├── components/         # Rail (navigation), Roster, Segmented control
 │   ├── data/               # characters, roster, mechs, factions, missions
 │   ├── pages/              # one component and stylesheet per route
-│   ├── styles/             # console.css (shared layout), doc.css (text pages)
+│   ├── styles/             # console.css (shared layout)
 │   ├── three/              # the 3D scenes and the machine models
 │   ├── App.jsx             # shell and routes
 │   ├── index.css           # fonts and global base
@@ -66,7 +66,7 @@ Everything shown on the site comes from `src/data/`:
 - `characters.js` - Processor files, portraits, feeds and personal marks
 - `mechs.js` - the machines in the Arsenal
 - `factions.js` - the powers and where each sits on the globe
-- `missions.js` - the episodes on file
+- `missions.js` - all 23 episodes, with their air dates and who each one involves
 
 ## Running locally
 

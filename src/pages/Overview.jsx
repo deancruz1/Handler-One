@@ -6,8 +6,7 @@ import { roster, neighbour } from "../data/roster";
 import { mountSector } from "../three/sectorScene";
 import "./overview.css";
 
-const EPISODES = 23;
-const FIRST_OF_ACT_TWO = 12;
+const ACT_ONE = missions.filter((m) => m.act === 1).length;
 
 function Overview() {
   const [id, setId] = useState("shin");
@@ -70,9 +69,6 @@ function Overview() {
         <div className={`dossier${who.kia ? " kia" : ""}`}>
           <div className="portrait">
             <img src={who.image} alt={who.name} />
-            {who.video && (
-              <video key={who.id} src={who.video} autoPlay muted loop playsInline />
-            )}
           </div>
           <div>
             <h2>{who.codename}</h2>
@@ -95,31 +91,27 @@ function Overview() {
 
       <section className="strip log">
         <div>
-          <div className="ticks">
-            {Array.from({ length: EPISODES }, (_, i) => {
-              const at = missions.findIndex((m) => Number(m.ep) === i + 1);
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  className={`${i + 1 >= FIRST_OF_ACT_TWO ? "act2" : ""}${at >= 0 ? " has" : ""}`}
-                  disabled={at < 0}
-                  aria-pressed={at >= 0 && at === record}
-                  aria-label={`Episode ${i + 1}`}
-                  title={at >= 0 ? missions[at].title : undefined}
-                  onClick={() => setRecord(at)}
-                />
-              );
-            })}
+          <div className="ticks" style={{ gridTemplateColumns: `repeat(${missions.length}, 1fr)` }}>
+            {missions.map((m, i) => (
+              <button
+                key={m.id}
+                type="button"
+                className={m.act === 2 ? "act2" : undefined}
+                aria-pressed={i === record}
+                aria-label={`Episode ${m.ep}: ${m.title}`}
+                title={m.title}
+                onClick={() => setRecord(i)}
+              />
+            ))}
           </div>
-          <div className="acts">
+          <div className="acts" style={{ gridTemplateColumns: `${ACT_ONE}fr ${missions.length - ACT_ONE}fr` }}>
             <span>Republic front</span>
             <span>Federal campaign</span>
           </div>
         </div>
         <div className="entry">
           <div className="k">
-            Episode {mission.ep}, {mission.operationDate}
+            Episode {mission.ep}, aired {mission.aired}
             <span className="step">
               <button
                 type="button"

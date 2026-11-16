@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Roster from "../components/Roster";
 import { roster, neighbour } from "../data/roster";
 import "./squadron.css";
 
 function Characters() {
-  const [id, setId] = useState(roster[0].id);
+  const [params] = useSearchParams();
+  const [id, setId] = useState(() =>
+    roster.some((r) => r.id === params.get("id")) ? params.get("id") : roster[0].id,
+  );
   const rows = useRef({});
   const byKeyboard = useRef(false);
 

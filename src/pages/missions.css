@@ -1,0 +1,351 @@
+/* One episode at full size, the episode list beside it, and every episode along the strip. */
+.missions {
+  --c: var(--signal);
+}
+.missions.act2 {
+  --c: var(--alert);
+}
+
+.missions .stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(28px, 3vw, 72px);
+}
+.missions .stage h1 {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font: 600 30px/1 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.missions .big {
+  position: absolute;
+  top: 4%;
+  right: 3%;
+  font: 700 clamp(220px, 28vw, 720px) / 0.8 var(--display);
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--c) 45%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+.brief {
+  position: relative;
+  max-width: min(1180px, 72%);
+  animation: brief 0.35s ease-out;
+}
+@keyframes brief {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.brief h2 {
+  font: 700 clamp(56px, 6.4vw, 172px) / 0.88 var(--display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--c);
+}
+.brief dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em 2.6em;
+  margin: clamp(16px, 1.4vw, 32px) 0;
+  font-size: clamp(11.5px, 0.35vw + 6.5px, 14.5px);
+}
+.brief dt {
+  color: var(--dim);
+  margin-bottom: 0.2em;
+}
+.brief .st {
+  color: var(--c);
+}
+.brief p {
+  color: #c3ccd6;
+  font-size: clamp(14px, 0.5vw + 7.5px, 19px);
+  line-height: 1.7;
+  max-width: 62ch;
+}
+
+/* everyone the episode names, linked to their file */
+.cast {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(10px, 0.8vw, 18px);
+  margin-top: clamp(20px, 2vw, 44px);
+}
+.cast a {
+  display: grid;
+  gap: 4px;
+  width: clamp(84px, 6.2vw, 150px);
+}
+.cast img {
+  width: 100%;
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+  margin-bottom: 6px;
+}
+.cast a:hover img {
+  outline-color: var(--c);
+}
+.cast b {
+  font: 600 clamp(14px, 0.45vw + 8px, 20px) / 1.05 var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cast a:hover b {
+  color: var(--c);
+}
+.cast small {
+  color: var(--dim);
+  font-size: clamp(10px, 0.2vw + 6px, 12px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── side panel: the episodes by arc, one arc open at a time ── */
+.eps .act1 {
+  --a: var(--signal);
+}
+.eps .act2 {
+  --a: var(--alert);
+}
+.eps .arcgroup + .arcgroup {
+  border-top: 1px solid var(--line);
+}
+.eps .arc {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+.eps .arc span:first-child {
+  font: 700 22px/1 var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--a);
+}
+.eps .arc span:last-child {
+  color: var(--dim);
+  font-size: 11px;
+}
+.eps .arc::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  border-right: 1.5px solid var(--dim);
+  border-bottom: 1.5px solid var(--dim);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s;
+}
+.eps .open .arc::after {
+  transform: translateY(2px) rotate(225deg);
+}
+.eps .arc:hover::after {
+  border-color: var(--text);
+}
+.eps .list {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+.eps .open .list {
+  grid-template-rows: 1fr;
+}
+.eps .list > div {
+  overflow: hidden;
+  min-height: 0;
+}
+.eps .list button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 16px;
+  border-left: 2px solid transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.eps .list button:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.eps .list button[aria-selected="true"] {
+  background: color-mix(in srgb, var(--a) 9%, transparent);
+  border-left-color: var(--a);
+}
+.eps .n {
+  font: 700 28px/1 var(--display);
+  color: var(--a);
+}
+.eps b {
+  display: block;
+  font: 600 19px/1.1 var(--display);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.eps small {
+  color: var(--dim);
+  font-size: 10.5px;
+}
+
+/* ── strip: every episode, the selected one lit ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+.cells {
+  display: grid;
+  grid-template-columns: repeat(23, minmax(0, 1fr));
+  gap: 3px;
+  align-items: end;
+}
+.cells button {
+  --a: var(--signal);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--dim);
+  font-size: clamp(10px, 0.3vw + 6px, 14px);
+  text-align: center;
+  cursor: pointer;
+}
+.cells button.act2 {
+  --a: var(--alert);
+}
+.cells i {
+  height: 30px;
+  border: 1px solid color-mix(in srgb, var(--a) 60%, transparent);
+  background: color-mix(in srgb, var(--a) 10%, transparent);
+}
+.cells button:hover {
+  color: var(--text);
+}
+.cells button:hover i {
+  border-color: var(--a);
+}
+.cells button[aria-pressed="true"] {
+  color: var(--text);
+}
+.cells button[aria-pressed="true"] i {
+  background: var(--a);
+}
+.arcs {
+  display: grid;
+  gap: 3px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.arcs span {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 5px;
+}
+
+/* on a phone the episodes are one row of names above the episode, and the strip keeps only its bars */
+@media (max-width: 980px) {
+  .missions .side {
+    order: -1;
+  }
+  .eps {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  /* one row: each arc's name, with the open arc's episodes after it */
+  .eps .arcgroup,
+  .eps .list,
+  .eps .list > div {
+    display: contents;
+  }
+  .eps .arcgroup:not(.open) .list {
+    display: none;
+  }
+  .eps .arc {
+    width: auto;
+    flex: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 14px 0 16px;
+    white-space: nowrap;
+  }
+  .eps .arcgroup + .arcgroup .arc {
+    border-left: 1px solid var(--line);
+  }
+  .eps .arc span:first-child {
+    font-size: 17px;
+  }
+  .eps .arc::after {
+    display: none;
+  }
+  .eps .list button {
+    width: auto;
+    flex: none;
+    grid-template-columns: auto auto;
+    padding: 12px 16px 10px 12px;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .eps .list button:first-child {
+    border-left: 1px solid var(--line);
+  }
+  .eps .list button[aria-selected="true"] {
+    border-bottom-color: var(--a);
+  }
+  .eps .n {
+    font-size: 26px;
+  }
+  .eps small {
+    font-size: 11px;
+  }
+  .missions .stage {
+    height: auto;
+    min-height: 0;
+    padding: 64px 16px 28px;
+  }
+  .missions .big {
+    display: none;
+  }
+  .brief {
+    max-width: none;
+  }
+  .missions .strip {
+    height: auto;
+    padding: 20px 16px;
+  }
+  .cells span {
+    display: none;
+  }
+  .cells button {
+    position: relative;
+  }
+  .cells button::after {
+    content: "";
+    position: absolute;
+    inset: -12px -2px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brief {
+    animation: none;
+  }
+  .eps .list,
+  .eps .arc::after {
+    transition: none;
+  }
+}
