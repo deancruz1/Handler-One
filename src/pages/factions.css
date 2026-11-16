@@ -1,0 +1,105 @@
+/* the globe sits in a soft vignette */
+.stage.tall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(5, 7, 10, 0.75));
+}
+
+/* signal tearing: brief bands of interference crossing the feed */
+.tear {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 26px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(245, 165, 36, 0.12) 30%, rgba(255, 77, 77, 0.1) 60%, transparent);
+  mix-blend-mode: screen;
+  animation: tear 7s steps(1) infinite;
+}
+.tear.b {
+  animation-delay: -3.1s;
+  height: 8px;
+}
+@keyframes tear {
+  0%,
+  100% {
+    opacity: 0;
+    top: 20%;
+  }
+  41% {
+    opacity: 1;
+    top: 63%;
+  }
+  42% {
+    opacity: 0;
+  }
+  73% {
+    opacity: 1;
+    top: 31%;
+  }
+  73.6% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tear {
+    animation: none;
+  }
+}
+
+.file .doctrine {
+  border-left: 1px solid var(--c);
+  padding-left: 10px;
+  margin-top: 18px;
+  color: #c3ccd6;
+  font-size: 11.5px;
+  line-height: 1.65;
+}
+
+/* the list of powers under the file */
+.powers {
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  padding: 6px 0;
+}
+.powers button {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 16px;
+  border-left: 2px solid transparent;
+  font: 600 17px/1.1 var(--display);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+.powers button::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--c);
+  flex: none;
+}
+.powers button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.03);
+}
+.powers button[aria-selected="true"] {
+  background: color-mix(in srgb, var(--c) 9%, transparent);
+  border-left-color: var(--c);
+}
+.powers button:disabled {
+  cursor: default;
+  color: var(--faint);
+}
+.powers small {
+  margin-left: auto;
+  font: 400 10px var(--mono);
+  letter-spacing: 0;
+  text-transform: none;
+}
