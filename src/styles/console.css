@@ -1,0 +1,280 @@
+/* The console: a nav rail on the left and a page beside it. Pages built as consoles split into a stage,
+   a side panel and an optional strip under the stage. */
+:root {
+  --bg: #05070a;
+  --panel: #080b10;
+  --line: rgba(140, 175, 215, 0.16);
+  --line-strong: rgba(140, 175, 215, 0.34);
+  --text: #d9e2ec;
+  --dim: #7a8898;
+  --faint: #44505e;
+  --signal: #4da3ff;
+  --alert: #ff4d4d;
+  --hostile: #f5a524;
+  --ally: #7fd4c8;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --display: "Barlow Condensed", sans-serif;
+}
+
+.shell {
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: 204px minmax(0, 1fr);
+  background: var(--bg);
+  color: var(--text);
+  font: 400 12px/1.5 var(--mono);
+}
+.shell :focus-visible {
+  outline: 1px solid var(--signal);
+  outline-offset: -1px;
+}
+
+/* nav rail */
+.rail {
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+  z-index: 60;
+  background: var(--bg);
+}
+.brand {
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  font: 700 20px/1 var(--display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.brand i {
+  width: 8px;
+  height: 8px;
+  background: var(--signal);
+}
+.rail a:not(.brand) {
+  padding: 9px 16px;
+  color: var(--dim);
+  font: 500 17px/1.1 var(--display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-left: 2px solid transparent;
+}
+.rail a:not(.brand):hover {
+  color: var(--text);
+}
+.rail a:not(.brand)[aria-current] {
+  color: var(--text);
+  border-left-color: var(--signal);
+}
+
+.page {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  position: relative;
+}
+
+/* console pages */
+.console {
+  height: 100%;
+  display: grid;
+  grid-template: minmax(0, 1fr) 148px / minmax(0, 1fr) 372px;
+}
+.console > * {
+  min-width: 0;
+  min-height: 0;
+}
+.stage {
+  grid-area: 1 / 1 / 2 / 2;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.stage.tall {
+  grid-row: 1 / 3;
+  border-bottom: 0;
+}
+.stage > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+.stage > canvas:active {
+  cursor: grabbing;
+}
+.side {
+  grid-area: 1 / 2 / 3 / 3;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--faint) transparent;
+}
+.strip {
+  grid-area: 2 / 1 / 3 / 2;
+  position: relative;
+  padding: 0 16px;
+}
+
+/* labels pinned to points in a 3D scene */
+.tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 6px 2px 8px;
+  border-left: 1px solid currentColor;
+  color: var(--signal);
+  background: rgba(5, 7, 10, 0.9);
+  will-change: transform;
+}
+button.tag {
+  cursor: pointer;
+}
+button.tag:hover,
+.tag.sel {
+  background: currentColor;
+}
+button.tag:hover > *,
+.tag.sel > * {
+  color: #04101e;
+}
+.tag.note {
+  color: var(--dim);
+  border-left-style: dashed;
+  pointer-events: none;
+}
+
+/* segmented control */
+.seg {
+  display: flex;
+  border: 1px solid var(--line-strong);
+}
+.seg button {
+  color: var(--dim);
+  border-left: 1px solid var(--line);
+  padding: 5px 10px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.seg button:first-child {
+  border-left: 0;
+}
+.seg button[aria-pressed="true"] {
+  background: var(--signal);
+  color: #04101e;
+}
+.seg button:hover:not([aria-pressed="true"]):not(:disabled) {
+  color: var(--text);
+}
+.seg button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* a file in the side panel: heading, one table, prose */
+.file {
+  padding: 20px 16px 18px;
+}
+.file h2 {
+  font: 700 34px/0.95 var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--c, var(--signal));
+}
+.file .sub {
+  color: var(--dim);
+  margin-top: 6px;
+}
+.file dl {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 6px 10px;
+  font-size: 11px;
+  margin-top: 18px;
+}
+.file dt {
+  color: var(--dim);
+}
+.file p {
+  color: #aab6c3;
+  font-size: 11.5px;
+  line-height: 1.65;
+  margin-top: 18px;
+}
+
+/* older pages that have not moved into the console yet */
+.legacy {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 980px) {
+  .shell {
+    display: block;
+    height: auto;
+    min-height: 100dvh;
+  }
+  .rail {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .brand {
+    border: 0;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .rail a:not(.brand) {
+    white-space: nowrap;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    padding: 12px;
+  }
+  .rail a:not(.brand)[aria-current] {
+    border-bottom-color: var(--signal);
+  }
+  .page {
+    overflow: visible;
+  }
+  .console {
+    display: block;
+    height: auto;
+  }
+  .stage,
+  .stage.tall {
+    height: 60vh;
+    border-bottom: 1px solid var(--line);
+  }
+  .side {
+    border-left: 0;
+    overflow: visible;
+  }
+  .strip {
+    height: 148px;
+    border-top: 1px solid var(--line);
+  }
+}

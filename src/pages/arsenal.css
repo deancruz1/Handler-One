@@ -1,0 +1,55 @@
+.opts {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 16px;
+  align-items: center;
+  color: var(--dim);
+  font-size: 11px;
+}
+.opts .seg {
+  justify-self: end;
+}
+
+/* the scale lineup: the scene adds its canvas, one button per machine and the metre marks */
+.lineup {
+  position: relative;
+  height: 100%;
+}
+.lineup canvas {
+  width: 100%;
+  height: 100%;
+}
+.lineup button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding: 12px 8px;
+  border-top: 2px solid transparent;
+  margin-top: -1px;
+  font: 600 16px/1 var(--display);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--dim);
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.lineup button:hover {
+  color: var(--text);
+}
+.lineup button[aria-pressed="true"] {
+  border-top-color: var(--c);
+  color: var(--c);
+}
+.lineup .m {
+  position: absolute;
+  bottom: 3px;
+  font-size: 9px;
+  color: var(--dim);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
