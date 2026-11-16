@@ -90,6 +90,7 @@
   }
   .squadron .side {
     overflow: visible;
+    order: -1;
   }
   .squadron .crest {
     width: 72px;

@@ -18,8 +18,51 @@
   position: relative;
   height: 100%;
 }
-/* on a phone the lineup keeps its size and scrolls sideways */
+.pick {
+  display: none;
+}
+
+/* on a phone the machines are picked from a grid under the viewer, and the lineup keeps its size and scrolls sideways */
 @media (max-width: 980px) {
+  .pick {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid var(--line);
+  }
+  .pick button {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 13px 16px 11px;
+    border-bottom: 2px solid transparent;
+    font: 600 17px/1.1 var(--display);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--dim);
+    cursor: pointer;
+  }
+  .pick button:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+  .pick button:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+  .pick button::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex: none;
+    background: var(--c);
+  }
+  .pick button[aria-selected="true"] {
+    color: var(--text);
+    border-bottom-color: var(--c);
+    background: color-mix(in srgb, var(--c) 9%, transparent);
+  }
+  .opts {
+    font-size: 12px;
+  }
   .strip:has(.lineup) {
     overflow-x: auto;
   }

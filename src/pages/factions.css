@@ -103,3 +103,20 @@
   letter-spacing: 0;
   text-transform: none;
 }
+
+@media (max-width: 980px) {
+  .powers {
+    margin-top: 0;
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .powers button {
+    padding: 13px 16px;
+  }
+  .powers small {
+    font-size: 11px;
+  }
+  .file .doctrine {
+    font-size: 13px;
+  }
+}

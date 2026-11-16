@@ -221,23 +221,15 @@ button.tag:hover > *,
     height: auto;
     min-height: 100dvh;
   }
+  /* the rail becomes a header: the name and GitHub on one line, all six pages in a grid under it */
   .rail {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    flex-direction: row;
-    align-items: center;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     border-right: 0;
     border-bottom: 1px solid var(--line);
-    background: var(--bg);
-    /* the links run off the edge: fade the last of them to show there is more to swipe to */
-    padding-right: 28px;
-    mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent);
-    scrollbar-width: none;
   }
   .brand {
-    border: 0;
+    grid-area: 1 / 1 / 2 / 3;
     margin: 0;
     white-space: nowrap;
   }
@@ -245,29 +237,60 @@ button.tag:hover > *,
     white-space: nowrap;
     border-left: 0;
     border-bottom: 2px solid transparent;
-    padding: 12px;
+    padding: 13px 16px 11px;
+    font-size: 16px;
   }
   .rail a:not(.brand)[aria-current] {
     border-bottom-color: var(--signal);
   }
+  .rail a[target] {
+    grid-area: 1 / 3 / 2 / 4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
   .page {
     overflow: visible;
   }
+  /* one column: the stage, then the side panel with its picker first, then the strip */
   .console {
-    display: block;
+    display: flex;
+    flex-direction: column;
     height: auto;
   }
   .stage,
   .stage.tall {
-    height: min(60vh, 480px);
+    height: min(56vh, 460px);
     border-bottom: 1px solid var(--line);
   }
   .side {
     border-left: 0;
     overflow: visible;
   }
+  .side > .roster,
+  .side > .powers,
+  .side > .pick {
+    order: -1;
+  }
   .strip {
     height: 148px;
     border-top: 1px solid var(--line);
+  }
+  .tag {
+    font-size: 11px;
+    padding: 5px 8px 5px 9px;
+  }
+  .seg button {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+  .file dl {
+    font-size: 12px;
+  }
+  .file p {
+    font-size: 13px;
   }
 }

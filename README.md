@@ -18,7 +18,7 @@ Live site: [https://deancruz1.github.io/Handler-One/](https://deancruz1.github.i
 ## Features
 
 - **3D models built in code.** The four machines are assembled from three.js geometry in `src/three/`, with no model files to download. Each has a rigged walk cycle and can be shown as a hologram or painted.
-- **Console layout.** One navigation rail and a shared stage, side panel and strip layout across every page, collapsing to a single column on phones.
+- **Console layout.** One navigation rail and a shared stage, side panel and strip layout across every page. On phones and tablets it becomes one column: the rail turns into a header with all six pages in a grid, and each page's picker (the roster, the machines, the powers) sits directly under its view, so what you tap and what it changes stay on screen together.
 - **Keyboard control.** Arrow keys step through Processors, machines, powers and episodes. In the Arsenal, `W` toggles the walk cycle and `P` shows the pilot.
 - **Deep links on GitHub Pages.** A custom `404.html` and a redirect in `main.jsx` let any route be opened or refreshed directly on static hosting.
 - **Reduced motion.** Auto-rotation and looping animations stop when the visitor's system asks for less motion.

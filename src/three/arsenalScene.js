@@ -98,7 +98,12 @@ export function mountArsenal({ stage, lineup, mechs, onSelect }) {
       const prev = view; view = next;
       if (!prev || prev.id !== next.id || prev.load !== next.load) build();
       else if (prev.style !== next.style || prev.pilot !== next.pilot) restyle();
-      if (!prev || prev.id !== next.id) drawLineup();
+      if (!prev || prev.id !== next.id) {
+        drawLineup();
+        // on a phone the lineup scrolls sideways: keep the selected machine in view
+        const strip = lineup.parentElement, btn = slots.find(s => s.m.id === next.id)?.btn;
+        if (btn && strip.scrollWidth > strip.clientWidth) strip.scrollTo({ left: btn.offsetLeft - (strip.clientWidth - btn.offsetWidth) / 2, behavior: prev ? "smooth" : "auto" });
+      }
     },
     dispose() {
       cancelAnimationFrame(raf); ro.disconnect(); seen.stop(); controls.dispose(); env.dispose();

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { synced, lost } from "../data/roster";
 import "./roster.css";
 
@@ -15,6 +16,19 @@ const waves = Object.fromEntries(synced.map((r, i) => [r.id, wave(i + 1)]));
 // The sync roster: the living with a live waveform, the lost with a flat line.
 // `rows` is a ref whose `.current` collects each row's element by id, for scrolling one into view.
 function Roster({ selected, onSelect, rows }) {
+  const list = useRef(null);
+
+  // When the roster is a sideways row (phones), bring the selected name to the middle of it.
+  useEffect(() => {
+    const el = list.current;
+    const item = rows?.current[selected];
+    if (!el || !item || el.scrollWidth <= el.clientWidth) return;
+    el.scrollTo({
+      left: item.offsetLeft - (el.clientWidth - item.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+  }, [selected, rows]);
+
   const row = (r) => (
     <button
       key={r.id}
@@ -45,7 +59,7 @@ function Roster({ selected, onSelect, rows }) {
   );
 
   return (
-    <div className="roster" role="listbox" aria-label="Processors">
+    <div className="roster" role="listbox" aria-label="Processors" ref={list}>
       <div className="grp">
         <span>Synced</span>
         <span>{synced.length}</span>

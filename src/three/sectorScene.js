@@ -151,7 +151,9 @@ export function mountSector(mapEl, inset, roster, onSelect) {
       uCam.position.set(Math.cos(a) * 9.4, 3.5, Math.sin(a) * 9.4); uCam.lookAt(0, .98, -.2); uR.render(uScene, uCam);
     }
     const w = mapEl.clientWidth, h = mapEl.clientHeight;
-    tags.forEach(({ el, v: p, lift }) => { v.copy(p); v.y += lift; v.project(camera); const hid = v.z > 1; el.style.opacity = hid ? 0 : 1; el.style.transform = `translate(${((v.x + 1) / 2 * w + 8).toFixed(1)}px,${((1 - v.y) / 2 * h - 12).toFixed(1)}px)`; });
+    // a tag whose point is off the map is hidden; one whose point is on it is kept inside the edges
+    tags.forEach(({ el, v: p, lift }) => { v.copy(p); v.y += lift; v.project(camera); const hid = v.z > 1 || Math.abs(v.x) > 1; el.style.opacity = hid ? 0 : 1; el.style.pointerEvents = hid ? 'none' : '';
+      el.style.transform = `translate(${Math.max(4, Math.min((v.x + 1) / 2 * w + 8, w - el.offsetWidth - 4)).toFixed(1)}px,${((1 - v.y) / 2 * h - 12).toFixed(1)}px)`; });
   }
   frame();
 

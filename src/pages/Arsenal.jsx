@@ -77,6 +77,22 @@ function Arsenal() {
       <section className="stage" ref={stage} aria-label="Unit viewer" />
 
       <aside className="side">
+        {/* phones only: the lineup is too wide to pick from there */}
+        <div className="pick" role="listbox" aria-label="Machines">
+          {mechs.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              role="option"
+              aria-selected={m.id === view.id}
+              style={{ "--c": m.hostile ? "var(--hostile)" : "var(--signal)" }}
+              onClick={() => set("id")(m.id)}
+            >
+              {m.name.replace(/\s*\(.*/, "")}
+            </button>
+          ))}
+        </div>
+
         <div className="file" style={{ "--c": accent }}>
           <h2>{mech.name}</h2>
           <div className="sub">{mech.faction}</div>

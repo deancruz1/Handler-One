@@ -119,3 +119,16 @@
     padding: 28px 16px 56px;
   }
 }
+/* on a phone the episode number sits beside the title and the text takes the full width */
+@media (max-width: 600px) {
+  .episode {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 10px 12px;
+  }
+  .episode .ep {
+    font-size: 28px;
+  }
+  .episode p {
+    grid-column: 1 / -1;
+  }
+}

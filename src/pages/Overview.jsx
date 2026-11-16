@@ -120,6 +120,22 @@ function Overview() {
         <div className="entry">
           <div className="k">
             Episode {mission.ep}, {mission.operationDate}
+            <span className="step">
+              <button
+                type="button"
+                aria-label="Previous episode"
+                onClick={() => setRecord((i) => (i - 1 + missions.length) % missions.length)}
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                aria-label="Next episode"
+                onClick={() => setRecord((i) => (i + 1) % missions.length)}
+              >
+                ›
+              </button>
+            </span>
           </div>
           <h4>{mission.title}</h4>
           <p>{mission.desc}</p>
